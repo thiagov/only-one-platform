@@ -3,7 +3,7 @@ Hero   = require 'Hero'
 
 -- Load resources
 function love.load()
-  instance = Hero()
+  instance = Hero(0, 0)
 end
 
 -- Called continuously. dt = delta time
