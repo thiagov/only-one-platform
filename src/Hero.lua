@@ -1,9 +1,9 @@
 Animation = require 'Animation'
 
 local Hero = Object:extend()
-local gravity = 1000
+local gravity = 500
 
-local falling, jumping = "falling", "jumping", "idle"
+local falling, jumping, idle = "falling", "jumping", "idle"
 
 function Hero:new(x, y, speed, width, height)
   self.idleAnim = Animation(love.graphics.newImage("assets/sprites/idle100x150.png"), 100, 150, 0.5)
@@ -14,9 +14,8 @@ function Hero:new(x, y, speed, width, height)
   self.speed = speed
   self.width = width
   self.height = height
-  self.status = idle;
+  self.status = idle
   self.jumpHeight = -300
-  self.timeFalling = 0
   self.velocity = 0
 end
 
@@ -35,39 +34,35 @@ function Hero:update(dt, platform)
     self.idleAnim:update(dt)
   end
 
-  if (self.y + self.height < platform.y and (self.y + dt * gravity) + self.height >= platform.y)
-        or (self.y + self.height == platform.y and platform.x <= self.x + self.width and self.x <= platform.x + platform.width) then
+  local probablyNewY = self.y + dt * self.velocity
+  local xInPlatform = platform.x <= self.x + self.width and self.x <= platform.x + platform.width
+  local landedOnPlatform = (self.y + self.height < platform.y and probablyNewY + self.height >= platform.y) and xInPlatform
+  local isOnPlatform = (self.y + self.height == platform.y) and xInPlatform
+
+  if (self.status == falling and landedOnPlatform) then
     self.status = idle
-  else
-    self.status = falling
-  end
-
-  if self.status == falling then
-    self.timeFalling = self.timeFalling + dt
-    self.y = self.y + (dt * (self.velocity + dt * gravity / 2))
-    self.velocity = self.velocity + dt * gravity
-  else
-    self.timeFalling = 0
     self.velocity = 0
+  elseif self.status == idle and love.keyboard.isDown("space") then
+    self.status = jumping
+    self.velocity = self.jumpHeight
+  elseif (self.status == idle and not isOnPlatform) or (self.status == jumping and self.velocity >= 0) then
+    self.status = falling
+    self.velocity = gravity * dt
+  end
+
+  if self.status == idle then
     self.y = platform.y - self.height
+  elseif self.velocity ~= 0 then
+    self.y = probablyNewY
+    self.velocity = self.velocity + gravity * dt
   end
 
-  if love.keyboard.isDown("space") then
-    if not self.status == falling then
-      self.y = self.y + self.jumpHeight * dt
-      self.jumpHeight = self.jumpHeight - self.jumpHeight * dt
-    end
-  end
-end
-
-function Hero:handleKey(key)
-  if key == "space" then
-    print("space pressed")
-  end
 end
 
 function Hero:draw()
   love.graphics.rectangle('line', self.x, self.y, self.width, self.height)
+  love.graphics.print("Status: "..self.status, 1000, 1000)
+  love.graphics.print("Velocity: "..self.velocity, 1000, 500)
   if self.animation == "moving" then
     self.walkAnim:draw(self.x, self.y)
   else
