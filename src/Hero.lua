@@ -1,6 +1,7 @@
 Animation = require 'Animation'
 
 local Hero = Object:extend()
+local gravity = 1000
 
 local falling, jumping = "falling", "jumping", "idle"
 
@@ -11,11 +12,12 @@ function Hero:new(x, y, speed, width, height)
   self.x = x
   self.y = y
   self.speed = speed
-  self.gravity = 300
   self.width = width
   self.height = height
   self.status = idle;
   self.jumpHeight = -300
+  self.timeFalling = 0
+  self.velocity = 0
 end
 
 function Hero:update(dt, platform)
@@ -33,7 +35,7 @@ function Hero:update(dt, platform)
     self.idleAnim:update(dt)
   end
 
-  if (self.y + self.height < platform.y and (self.y + dt * self.gravity) + self.height >= platform.y)
+  if (self.y + self.height < platform.y and (self.y + dt * gravity) + self.height >= platform.y)
         or (self.y + self.height == platform.y and platform.x <= self.x + self.width and self.x <= platform.x + platform.width) then
     self.status = idle
   else
@@ -41,8 +43,12 @@ function Hero:update(dt, platform)
   end
 
   if self.status == falling then
-    self.y = self.y + dt * self.gravity
+    self.timeFalling = self.timeFalling + dt
+    self.y = self.y + (dt * (self.velocity + dt * gravity / 2))
+    self.velocity = self.velocity + dt * gravity
   else
+    self.timeFalling = 0
+    self.velocity = 0
     self.y = platform.y - self.height
   end
 
