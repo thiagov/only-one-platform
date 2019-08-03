@@ -9,7 +9,7 @@ function love.load()
   width, height = 1920, 1080
   font = love.graphics.newFont(14)
   platformInstance = Platform(10, 200, 150, 50)
-  heroInstance = Hero(0, 0, 200)
+  heroInstance = Hero(0, 0, 200, 100, 150)
 end
 
 -- Called continuously. dt = delta time
