@@ -13,7 +13,7 @@ function love.load()
   ys = desktopHeight/height
   font = love.graphics.newFont(14)
   platformInstance = Platform(10, 200, 150, 50)
-  itemsInstance = { Item(width - 50, height/2, 50, 50), Item(200, 10, 50, 50), Item(200, 200, 50, 50), Item(400, 300, 50, 50) }
+  itemsInstance = { Item(width, height/2, 50, 50), Item(width, 10, 50, 50), Item(width, 200, 50, 50), Item(width, 300, 50, 50) }
   heroInstance = Hero(0, 0, 200, 100, 150)
   score = 0
 end
@@ -29,6 +29,8 @@ function love.update(dt)
   local removedItems = handleCollision()
   updateScore(removedItems)
   updateResult = love.timer.getTime() - updateStart
+  removeItemsOutOfWorld()
+  computeGameOver()
 end
 
 -- All drawing comes here
@@ -100,4 +102,18 @@ function collide(hero, item)
   x2 < x1+w1 and
   y1 < y2+h2 and
   y2 < y1+h1
+end
+
+function removeItemsOutOfWorld()
+  for i, item in ipairs(itemsInstance) do
+    if (item.x + item.width) < 0 then
+      table.remove(itemsInstance, i)
+    end
+  end
+end
+
+function computeGameOver()
+  if heroInstance.y > height then
+    print('morreu')
+  end
 end

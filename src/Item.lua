@@ -11,14 +11,24 @@ function Item:new(x, y, width, height)
   self.yV = 0
   self.movementType = movementTypes[math.random(#movementTypes)]
   self.score = 50
+  self.timeOnMovementType = 0
+  self.velocity = 200 + math.random(300)
 end
 
 function Item:update(dt)
-  self.x = self.x - 500*dt
-  if self.movementType == linear then
-  else
+  self:changeMovementType(dt)
+  self.x = self.x - self.velocity*dt
+  if self.movementType == sin then
     self.yV = self.yV + 3*dt
     self.y = self.y + 10*math.sin(self.yV)
+  end
+end
+
+function Item:changeMovementType(dt)
+  self.timeOnMovementType = self.timeOnMovementType + dt
+  if self.timeOnMovementType > 1 then
+    self.movementType = movementTypes[math.random(#movementTypes)]
+    self.timeOnMovementType = 0
   end
 end
 
