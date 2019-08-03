@@ -28,8 +28,25 @@ function Hero:update(dt, platform)
     self.animation = "idle"
     self.idleAnim:update(dt)
   end
-  if self.y + self.height <= platform.y then
+  cai = true
+  exatamente_em_cima = false
+
+  if self.y <= platform.y then
+    print("cai1")
+    if self.y + dt * self.gravity >= platform.y then
+      cai = false
+      exatamente_em_cima = true
+    end
+  elseif self.y == platform.y and platform.x <= self.x + self.width and self.x <= platform.x + platform.width then
+      cai = false
+  end
+  print("caigeral")
+
+
+  if cai then
     self.y = self.y + dt * self.gravity
+  elseif exatamente_em_cima then
+    self.y = platform.y - self.height
   end
 end
 
