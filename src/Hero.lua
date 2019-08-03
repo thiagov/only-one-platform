@@ -34,6 +34,7 @@ function Hero:update(dt, platform)
 end
 
 function Hero:draw()
+  love.graphics.rectangle('line', self.x, self.y, self.width, self.height)
   if self.animation == "moving" then
     self.walkAnim:draw(self.x, self.y)
   else
