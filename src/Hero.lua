@@ -82,8 +82,6 @@ end
 
 function Hero:draw()
   love.graphics.rectangle('line', self.x, self.y, self.width, self.height)
-  love.graphics.print("Status: "..self.status, 1000, 1000)
-  love.graphics.print("Velocity: "..self.velocity, 1000, 500)
   if self.animation == "moving" then
     self.walkAnim:draw(self.x, self.y)
   else

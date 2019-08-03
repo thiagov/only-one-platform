@@ -27,6 +27,7 @@ function love.update(dt)
   end
   updateResult = love.timer.getTime() - updateStart
   removeItemsOutOfWorld()
+  computeGameOver()
 end
 
 -- All drawing comes here
@@ -77,5 +78,11 @@ function removeItemsOutOfWorld()
     if (item.x + item.width) < 0 then
       table.remove(itemsInstance, i)
     end
+  end
+end
+
+function computeGameOver()
+  if heroInstance.y > height then
+    print('morreu')
   end
 end
