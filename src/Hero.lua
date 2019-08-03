@@ -1,8 +1,7 @@
 Animation = require 'Animation'
 
 local Hero = Object:extend()
-local gravity = 500
-
+local gravity = 3000
 local falling, jumping, idle = "falling", "jumping", "idle"
 
 function Hero:new(x, y, speed, width, height)
@@ -15,7 +14,7 @@ function Hero:new(x, y, speed, width, height)
   self.width = width
   self.height = height
   self.status = idle
-  self.jumpHeight = -500
+  self.jumpHeight = -1000
   self.velocity = 0
 end
 
@@ -60,6 +59,9 @@ end
 
 function Hero:draw()
   love.graphics.rectangle('line', self.x, self.y, self.width, self.height)
+  if false then
+    love.graphics.print("Velocity: "..self.velocity, 1000, 500)
+  end
   if self.animation == "moving" then
     self.walkAnim:draw(self.x, self.y)
   else
