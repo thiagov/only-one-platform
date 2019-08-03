@@ -1,22 +1,26 @@
 local Item = Object:extend()
 
+local linear, sin = "linear", "sin"
+local movementTypes = {linear, sin}
+
 function Item:new(x, y, width, height)
   self.width = width
   self.height = height
   self.x = x
   self.y = y
   self.yV = 0
-end
-
-function Item:updatePosition(x, y)
-  self.x = x
-  self.y = y
+  self.movementType = movementTypes[math.random(#movementTypes)]
+  print(self.movementType)
+  print(#movementTypes)
 end
 
 function Item:update(dt)
   self.x = self.x - 500*dt
-  self.yV = self.yV + 3*dt
-  self.y = self.y + 10*math.sin(self.yV)
+  if self.movementType == linear then
+  else
+    self.yV = self.yV + 3*dt
+    self.y = self.y + 10*math.sin(self.yV)
+  end
 end
 
 function Item:draw()

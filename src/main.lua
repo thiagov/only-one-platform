@@ -5,6 +5,7 @@ Item = require 'Item'
 
 -- Load resources
 function love.load()
+  math.randomseed(os.time())
   love.window.setFullscreen(true, "desktop")
   desktopWidth, desktopHeight, flags = love.window.getMode( )
   width, height = 1920, 1080
