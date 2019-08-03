@@ -1,7 +1,7 @@
-Object = require 'libs/classic'
-Hero   = require 'Hero'
-Platform = require 'Platform'
-Item = require 'Item'
+Object    = require 'libs/classic'
+Hero      = require 'Hero'
+Platform  = require 'Platform'
+Item      = require 'Item'
 ScoreTick = require 'ScoreTick'
 
 -- Load resources
@@ -34,10 +34,10 @@ function love.update(dt)
   end
   local removedItems = handleCollision()
   updateScore(removedItems)
-  updateResult = love.timer.getTime() - updateStart
   removeItemsOutOfWorld()
   computeGameOver()
   generateRandomItems(dt)
+  updateResult = love.timer.getTime() - updateStart
 end
 
 -- All drawing comes here
@@ -84,7 +84,7 @@ end
 
 function love.mousepressed(x, y, button, istouch)
   if button == 1 then
-    platformInstance:updatePosition(x/xs, y/ys)
+    platformInstance:updatePosition(x/xs - platformInstance.width/2, y/ys - platformInstance.height/2)
   end
 end
 
@@ -130,7 +130,7 @@ end
 
 function computeGameOver()
   if heroInstance.y > height then
-    print('morreu')
+    -- print('morreu')
   end
 end
 
