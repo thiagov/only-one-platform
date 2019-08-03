@@ -10,8 +10,7 @@ function Item:new(x, y, width, height)
   self.y = y
   self.yV = 0
   self.movementType = movementTypes[math.random(#movementTypes)]
-  print(self.movementType)
-  print(#movementTypes)
+  self.score = 50
 end
 
 function Item:update(dt)

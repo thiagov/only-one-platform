@@ -56,29 +56,7 @@ function Hero:update(dt, platform, items)
     self.y = probablyNewY
     self.velocity = self.velocity + gravity * dt
   end
-
-  self:handleCollision(items)
 end
-
-function Hero:handleCollision(items)
-  for i, item in ipairs(items) do
-    if collide(self, item) then
-      item.applyEffect()
-      table.remove(items, i)
-    end
-  end
-end
-
-function collide(hero, item)
-  local x1, y1, w1, h1 = hero.x, hero.y, hero.width, hero.height
-  local x2, y2, w2, h2 = item.x, item.y, item.width, item.height
-
-  return x1 < x2+w2 and
-  x2 < x1+w1 and
-  y1 < y2+h2 and
-  y2 < y1+h1
-end
-
 
 function Hero:draw()
   love.graphics.rectangle('line', self.x, self.y, self.width, self.height)

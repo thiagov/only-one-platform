@@ -15,6 +15,7 @@ function love.load()
   platformInstance = Platform(10, 200, 150, 50)
   itemsInstance = { Item(width - 50, height/2, 50, 50), Item(200, 10, 50, 50), Item(200, 200, 50, 50), Item(400, 300, 50, 50) }
   heroInstance = Hero(0, 0, 200, 100, 150)
+  score = 0
 end
 
 -- Called continuously. dt = delta time
@@ -25,6 +26,8 @@ function love.update(dt)
   for i, item in ipairs(itemsInstance) do
     item:update(dt)
   end
+  local removedItems = handleCollision()
+  updateScore(removedItems)
   updateResult = love.timer.getTime() - updateStart
 end
 
@@ -39,6 +42,8 @@ function love.draw()
   end
   drawResult = love.timer.getTime() - drawStart
   drawUpdateDrawBars()
+
+  love.graphics.print("Score: "..score, width - 100, 0)
 end
 
 function drawUpdateDrawBars()
@@ -69,4 +74,30 @@ function love.mousepressed(x, y, button, istouch)
   if button == 1 then
     platformInstance:updatePosition(x/xs, y/ys)
   end
+end
+
+function handleCollision()
+  local removed = {}
+  for i, item in ipairs(itemsInstance) do
+    if collide(heroInstance, item) then
+      table.insert(removed, table.remove(itemsInstance, i))
+    end
+  end
+  return removed
+end
+
+function updateScore(removed)
+  for i, item in ipairs(removed) do
+    score = score + item.score
+  end
+end
+
+function collide(hero, item)
+  local x1, y1, w1, h1 = hero.x, hero.y, hero.width, hero.height
+  local x2, y2, w2, h2 = item.x, item.y, item.width, item.height
+
+  return x1 < x2+w2 and
+  x2 < x1+w1 and
+  y1 < y2+h2 and
+  y2 < y1+h1
 end
