@@ -13,7 +13,7 @@ function love.load()
   ys = desktopHeight/height
   font = love.graphics.newFont(14)
   platformInstance = Platform(10, 200, 150, 50)
-  itemsInstance = { Item(width - 50, height/2, 50, 50), Item(200, 10, 50, 50), Item(200, 200, 50, 50), Item(400, 300, 50, 50) }
+  itemsInstance = { Item(width, height/2, 50, 50), Item(width, 10, 50, 50), Item(width, 200, 50, 50), Item(width, 300, 50, 50) }
   heroInstance = Hero(0, 0, 200, 100, 150)
 end
 
@@ -26,6 +26,7 @@ function love.update(dt)
     item:update(dt)
   end
   updateResult = love.timer.getTime() - updateStart
+  removeItemsOutOfWorld()
 end
 
 -- All drawing comes here
@@ -68,5 +69,13 @@ end
 function love.mousepressed(x, y, button, istouch)
   if button == 1 then
     platformInstance:updatePosition(x/xs, y/ys)
+  end
+end
+
+function removeItemsOutOfWorld()
+  for i, item in ipairs(itemsInstance) do
+    if (item.x + item.width) < 0 then
+      table.remove(itemsInstance, i)
+    end
   end
 end
