@@ -117,7 +117,7 @@ end
 
 function removeItemsOutOfWorld()
   for i, item in ipairs(itemsInstance) do
-    if (item.x + item.width) < 0 then
+    if (item.x + item.width) < 0 or not item.visible then
       table.remove(itemsInstance, i)
     end
   end
@@ -134,12 +134,30 @@ function computeGameOver()
   end
 end
 
+local itemTypes = {
+  Item.itemTypes.good,
+  Item.itemTypes.good,
+  Item.itemTypes.good,
+  Item.itemTypes.good,
+  Item.itemTypes.good,
+  Item.itemTypes.bad,
+  Item.itemTypes.bad,
+  Item.itemTypes.bad,
+  Item.itemTypes.bad,
+  Item.itemTypes.bad,
+  Item.itemTypes.gooder
+}
 function generateRandomItems(dt)
   generationTime = generationTime + dt
   if generationTime > 1 then
     generationTime = 0
-    local itemHeight = 50
+    local itemHeight, itemWidth = 50, 50
+    local itemType = itemTypes[math.random(#itemTypes)]
     local itemPositionY = itemHeight + math.random(height - itemHeight)
-    table.insert(itemsInstance, Item(width, itemPositionY, 50, itemHeight))
+    local itemPositionX = width
+    if itemType == Item.itemTypes.gooder then
+      itemPositionX = itemWidth + math.random(width - itemWidth)
+    end
+    table.insert(itemsInstance, Item(itemPositionX, itemPositionY, itemWidth, itemHeight, itemType))
   end
 end
