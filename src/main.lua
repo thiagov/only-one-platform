@@ -13,9 +13,10 @@ function love.load()
   ys = desktopHeight/height
   font = love.graphics.newFont(14)
   platformInstance = Platform(10, 200, 150, 50)
-  itemsInstance = { Item(width, height/2, 50, 50), Item(width, 10, 50, 50), Item(width, 200, 50, 50), Item(width, 300, 50, 50) }
+  itemsInstance = {}
   heroInstance = Hero(0, 0, 200, 100, 150)
   score = 0
+  generationTime = 0
 end
 
 -- Called continuously. dt = delta time
@@ -31,6 +32,7 @@ function love.update(dt)
   updateResult = love.timer.getTime() - updateStart
   removeItemsOutOfWorld()
   computeGameOver()
+  generateRandomItems(dt)
 end
 
 -- All drawing comes here
@@ -115,5 +117,15 @@ end
 function computeGameOver()
   if heroInstance.y > height then
     print('morreu')
+  end
+end
+
+function generateRandomItems(dt)
+  generationTime = generationTime + dt
+  if generationTime > 1 then
+    generationTime = 0
+    local itemHeight = 50
+    local itemPositionY = itemHeight + math.random(height - itemHeight)
+    table.insert(itemsInstance, Item(width, itemPositionY, 50, itemHeight))
   end
 end
