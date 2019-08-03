@@ -2,6 +2,7 @@ Object = require 'libs/classic'
 Hero   = require 'Hero'
 Platform = require 'Platform'
 Item = require 'Item'
+ScoreTick = require 'ScoreTick'
 
 -- Load resources
 function love.load()
@@ -14,6 +15,7 @@ function love.load()
   font = love.graphics.newFont(14)
   platformInstance = Platform(10, 200, 150, 50)
   itemsInstance = {}
+  scoreTicksInstance = {}
   heroInstance = Hero(0, 0, 200, 100, 150)
   score = 0
   generationTime = 0
@@ -26,6 +28,9 @@ function love.update(dt)
   heroInstance:update(dt, platformInstance, itemsInstance)
   for i, item in ipairs(itemsInstance) do
     item:update(dt)
+  end
+  for i, scoreTick in ipairs(scoreTicksInstance) do
+    scoreTick:update(dt)
   end
   local removedItems = handleCollision()
   updateScore(removedItems)
@@ -43,6 +48,9 @@ function love.draw()
   heroInstance:draw()
   for i, item in ipairs(itemsInstance) do
     item:draw()
+  end
+  for i, scoreTick in ipairs(scoreTicksInstance) do
+    scoreTick:draw()
   end
   drawResult = love.timer.getTime() - drawStart
   drawUpdateDrawBars()
@@ -93,6 +101,7 @@ end
 function updateScore(removed)
   for i, item in ipairs(removed) do
     score = score + item.score
+    table.insert(scoreTicksInstance, ScoreTick(item.x+item.width/2, item.y+item.height/2, item.score))
   end
 end
 
@@ -110,6 +119,11 @@ function removeItemsOutOfWorld()
   for i, item in ipairs(itemsInstance) do
     if (item.x + item.width) < 0 then
       table.remove(itemsInstance, i)
+    end
+  end
+  for i, scoreTick in ipairs(scoreTicksInstance) do
+    if not scoreTick.visible then
+      table.remove(scoreTicksInstance, i)
     end
   end
 end
