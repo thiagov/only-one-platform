@@ -3,8 +3,8 @@ Animation = require 'Animation'
 local Hero = Object:extend()
 
 function Hero:new(x, y, speed, width, height)
-  self.idleAnim = Animation(love.graphics.newImage("assets/sprites/idle100x150.png"), width, height, 0.5)
-  self.walkAnim = Animation(love.graphics.newImage("assets/sprites/walk100x150.png"), width, height, 0.5)
+  self.idleAnim = Animation(love.graphics.newImage("assets/sprites/idle100x150.png"), 100, 150, 0.5)
+  self.walkAnim = Animation(love.graphics.newImage("assets/sprites/walk100x150.png"), 100, 150, 0.5)
   self.animation = "idle"
   self.x = x
   self.y = y
