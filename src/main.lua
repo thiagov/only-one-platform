@@ -12,7 +12,7 @@ function love.load()
   ys = desktopHeight/height
   font = love.graphics.newFont(14)
   platformInstance = Platform(10, 200, 150, 50)
-  itemTest = Item(200, 10, 50, 50)
+  itemTest = Item(width - 50, height/2, 50, 50)
   heroInstance = Hero(0, 0, 200, 100, 150)
 end
 
@@ -21,6 +21,7 @@ function love.update(dt)
   updateStart = love.timer.getTime()
   platformInstance:update(dt)
   heroInstance:update(dt, platformInstance)
+  itemTest:update(dt)
   updateResult = love.timer.getTime() - updateStart
 end
 
