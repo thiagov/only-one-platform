@@ -1,6 +1,8 @@
 local Item = Object:extend()
 
 local linear, sin = "linear", "sin"
+local good, bad = "good", "bad"
+local itemTypes = {good, bad}
 local movementTypes = {linear, sin}
 
 function Item:new(x, y, width, height)
@@ -10,7 +12,12 @@ function Item:new(x, y, width, height)
   self.y = y
   self.yV = 0
   self.movementType = movementTypes[math.random(#movementTypes)]
-  self.score = 50
+  self.itemType = itemTypes[math.random(#itemTypes)]
+  if self.itemType == good then
+    self.score = 50
+  elseif self.itemType == bad then
+    self.score = -100
+  end
   self.timeOnMovementType = 0
   self.velocity = 200 + math.random(300)
 end
@@ -33,7 +40,11 @@ function Item:changeMovementType(dt)
 end
 
 function Item:draw()
-  love.graphics.setColor(1, 0, 1)
+  if self.itemType == good then
+    love.graphics.setColor(0, 0, 1)
+  elseif self.itemType == bad then
+    love.graphics.setColor(1, 0, 0)
+  end
   love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
 end
 
