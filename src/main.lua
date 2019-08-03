@@ -1,6 +1,7 @@
 Object = require 'libs/classic'
 Hero   = require 'Hero'
 Platform = require 'Platform'
+Item = require 'Item'
 
 -- Load resources
 function love.load()
@@ -11,6 +12,7 @@ function love.load()
   ys = desktopHeight/height
   font = love.graphics.newFont(14)
   platformInstance = Platform(10, 200, 150, 50)
+  itemTest = Item(200, 10, 50, 50)
   heroInstance = Hero(0, 0, 200, 100, 150)
 end
 
@@ -28,6 +30,7 @@ function love.draw()
   love.graphics.scale(xs, ys)
   platformInstance:draw()
   heroInstance:draw()
+  itemTest:draw()
   drawResult = love.timer.getTime() - drawStart
   drawUpdateDrawBars()
 end

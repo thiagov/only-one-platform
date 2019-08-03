@@ -15,7 +15,7 @@ function Hero:new(x, y, speed, width, height)
   self.width = width
   self.height = height
   self.status = idle
-  self.jumpHeight = -300
+  self.jumpHeight = -500
   self.velocity = 0
 end
 
