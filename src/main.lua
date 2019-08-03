@@ -10,8 +10,8 @@ function love.load()
   xs = desktopWidth/width
   ys = desktopHeight/height
   font = love.graphics.newFont(14)
-  platformInstance = Platform(10/xs, 200/ys, 150*xs, 50*ys)
-  heroInstance = Hero(0, 0, 200, 100*xs, 150*ys)
+  platformInstance = Platform(10, 200, 150, 50)
+  heroInstance = Hero(0, 0, 200, 100, 150)
 end
 
 -- Called continuously. dt = delta time
