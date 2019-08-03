@@ -1,31 +1,34 @@
 Object = require 'libs/classic'
 Hero   = require 'Hero'
+Platform = require 'Platform'
 
 -- Load resources
 function love.load()
   love.window.setFullscreen(true, "desktop")
   desktopWidth, desktopHeight, flags = love.window.getMode( )
   width, height = 1920, 1080
-
   font = love.graphics.newFont(14)
-
-  instance = Hero(0, 0)
+  platformInstance = Platform(10, 200, 150, 50)
+  heroInstance = Hero(0, 0, 200)
 end
 
 -- Called continuously. dt = delta time
 function love.update(dt)
   updateStart = love.timer.getTime()
-  instance:update(dt)
+  heroInstance:update(dt)
+  platformInstance:update(dt)
   updateResult = love.timer.getTime() - updateStart
 end
 
 -- All drawing comes here
 function love.draw()
   drawStart = love.timer.getTime()
-  love.graphics.scale(desktopWidth/width, desktopHeight/height)
-  instance:draw()
+  xs = desktopWidth/width
+  ys = desktopHeight/height
+  love.graphics.scale(xs, ys)
+  platformInstance:draw()
+  heroInstance:draw()
   drawResult = love.timer.getTime() - drawStart
-
   drawUpdateDrawBars()
 end
 
@@ -51,4 +54,10 @@ function drawUpdateDrawBars()
   love.graphics.setColor(1, 1, 1)
   love.graphics.print("Update: "..updateResult*1000 .."ms", 10, height-barHeight*2+barHeight/2-fontHeight/2)
   love.graphics.print("Draw: "..updateResult*1000 .."ms", 10, height-barHeight+barHeight/2-fontHeight/2)
+end
+
+function love.mousepressed(x, y, button, istouch)
+  if button == 1 then
+    platformInstance:updatePosition(x/xs, y/ys)
+  end
 end
