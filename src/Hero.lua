@@ -2,6 +2,8 @@ Animation = require 'Animation'
 
 local Hero = Object:extend()
 
+local falling, jumping = "falling", "jumping", "idle"
+
 function Hero:new(x, y, speed, width, height)
   self.idleAnim = Animation(love.graphics.newImage("assets/sprites/idle100x150.png"), 100, 150, 0.5)
   self.walkAnim = Animation(love.graphics.newImage("assets/sprites/walk100x150.png"), 100, 150, 0.5)
@@ -12,6 +14,8 @@ function Hero:new(x, y, speed, width, height)
   self.gravity = 300
   self.width = width
   self.height = height
+  self.status = idle;
+  self.jumpHeight = -300
 end
 
 function Hero:update(dt, platform)
@@ -29,16 +33,24 @@ function Hero:update(dt, platform)
     self.idleAnim:update(dt)
   end
 
-  falling = true
   if (self.y + self.height < platform.y and (self.y + dt * self.gravity) + self.height >= platform.y)
-      or (self.y + self.height == platform.y and platform.x <= self.x + self.width and self.x <= platform.x + platform.width) then
-      falling = false
+        or (self.y + self.height == platform.y and platform.x <= self.x + self.width and self.x <= platform.x + platform.width) then
+    self.status = idle
+  else
+    self.status = falling
   end
 
-  if falling then
+  if self.status == falling then
     self.y = self.y + dt * self.gravity
   else
     self.y = platform.y - self.height
+  end
+
+  if love.keyboard.isDown("space") then
+    if not self.status == falling then
+      self.y = self.y + self.jumpHeight * dt
+      self.jumpHeight = self.jumpHeight - self.jumpHeight * dt
+    end
   end
 end
 

@@ -62,6 +62,6 @@ function love.mousepressed(x, y, button, istouch)
   end
 end
 
-function love.keypressed( key )
+function love.keypressed(key)
   heroInstance:handleKey(key)
 end
