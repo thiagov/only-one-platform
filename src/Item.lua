@@ -24,4 +24,8 @@ function Item:draw()
   love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
 end
 
+function Item:applyEffect()
+  print('applied item effect')
+end
+
 return Item;
