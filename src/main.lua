@@ -15,8 +15,8 @@ end
 -- Called continuously. dt = delta time
 function love.update(dt)
   updateStart = love.timer.getTime()
-  heroInstance:update(dt)
   platformInstance:update(dt)
+  heroInstance:update(dt, platformInstance)
   updateResult = love.timer.getTime() - updateStart
 end
 

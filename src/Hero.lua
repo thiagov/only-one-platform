@@ -9,6 +9,9 @@ function Hero:new(x, y, speed, width, height)
   self.x = x
   self.y = y
   self.speed = speed
+  self.gravity = 100
+  self.width = width
+  self.height = height
 end
 
 function Hero:update(dt, platform)
@@ -24,6 +27,9 @@ function Hero:update(dt, platform)
   else
     self.animation = "idle"
     self.idleAnim:update(dt)
+  end
+  if self.y + self.height <= platform.y then
+    self.y = self.y + dt * self.gravity
   end
 end
 
