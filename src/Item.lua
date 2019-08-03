@@ -2,7 +2,7 @@ local Item = Object:extend()
 
 local linear, sin, still = "linear", "sin", "still"
 local movementTypes = {linear, sin}
-local totalTimeToVanish = 10
+local totalTtl = 10
 
 Item.itemTypes = Object:extend()
 Item.itemTypes.good = "good"
@@ -22,14 +22,14 @@ function Item:new(x, y, width, height, itemType)
   if self.itemType == Item.itemTypes.gooder then
     self.score = 500
     self.movementType = still
-    self.color = {1, 1, 0}
-    self.timeToVanish = totalTimeToVanish
+    self.color = {1, 1, 0, 1}
+    self.ttl = totalTtl
   elseif self.itemType == Item.itemTypes.good then
     self.score = 50
-    self.color = {0, 0, 1}
+    self.color = {0, 0, 1, 1}
   elseif self.itemType == Item.itemTypes.bad then
     self.score = -100
-    self.color = {1, 0, 0}
+    self.color = {1, 0, 0, 1}
   end
   self.timeOnMovementType = 0
   self.velocity = 200 + math.random(300)
@@ -37,9 +37,9 @@ end
 
 function Item:update(dt)
   if self.movementType == still then
-    self.timeToVanish = self.timeToVanish - dt
-    self.color = {1, 1, 0, self.timeToVanish/totalTimeToVanish}
-    if self.timeToVanish <= 0 then
+    self.ttl = self.ttl - dt
+    self.color[4] = self.ttl/totalTtl
+    if self.ttl <= 0 then
       self.visible = false
     end
   else
