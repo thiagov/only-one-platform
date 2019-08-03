@@ -9,7 +9,7 @@ function Hero:new(x, y, speed, width, height)
   self.x = x
   self.y = y
   self.speed = speed
-  self.gravity = 100
+  self.gravity = 300
   self.width = width
   self.height = height
 end
@@ -28,25 +28,23 @@ function Hero:update(dt, platform)
     self.animation = "idle"
     self.idleAnim:update(dt)
   end
-  cai = true
-  exatamente_em_cima = false
 
-  if self.y <= platform.y then
-    print("cai1")
-    if self.y + dt * self.gravity >= platform.y then
-      cai = false
-      exatamente_em_cima = true
-    end
-  elseif self.y == platform.y and platform.x <= self.x + self.width and self.x <= platform.x + platform.width then
-      cai = false
+  falling = true
+  if (self.y + self.height < platform.y and (self.y + dt * self.gravity) + self.height >= platform.y)
+      or (self.y + self.height == platform.y and platform.x <= self.x + self.width and self.x <= platform.x + platform.width) then
+      falling = false
   end
-  print("caigeral")
 
-
-  if cai then
+  if falling then
     self.y = self.y + dt * self.gravity
-  elseif exatamente_em_cima then
+  else
     self.y = platform.y - self.height
+  end
+end
+
+function Hero:handleKey(key)
+  if key == "space" then
+    print("space pressed")
   end
 end
 

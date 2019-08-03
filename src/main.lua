@@ -61,3 +61,7 @@ function love.mousepressed(x, y, button, istouch)
     platformInstance:updatePosition(x/xs, y/ys)
   end
 end
+
+function love.keypressed( key )
+  heroInstance:handleKey(key)
+end
