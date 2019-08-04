@@ -181,6 +181,7 @@ end
 
 function drawDedAfter()
   if ded then
+    love.graphics.scale(1/xs, 1/ys)
     local prescalerCoefficient = math.min(dedBlur*dedFinish/dedTime, dedBlur)
     horizontalShader:send("prescaler", prescalerCoefficient*2.5)
     verticalShader:send("prescaler", prescalerCoefficient*2.5)
@@ -351,61 +352,61 @@ function generateDiededMessages()
   diededMessage1 = love.graphics.newCanvas(width, 108)
   love.graphics.setCanvas(diededMessage1)
   messageText="YOU DIEDED"
-  love.graphics.print(messageText, width/2-dedfont:getWidth(messageText)/2, 0)
+  love.graphics.print(messageText, 0, 0)
   table.insert(diededMessages, diededMessage1)
 
   diededMessage2 = love.graphics.newCanvas(width, 108)
   love.graphics.setCanvas(diededMessage2)
   messageText="DED"
-  love.graphics.print(messageText, width/2-dedfont:getWidth(messageText)/2, 0)
+  love.graphics.print(messageText, 0, 0)
   table.insert(diededMessages, diededMessage2)
 
   diededMessage3 = love.graphics.newCanvas(width, 108)
   love.graphics.setCanvas(diededMessage3)
   messageText="VERY DED"
-  love.graphics.print(messageText, width/2-dedfont:getWidth(messageText)/2, 0)
+  love.graphics.print(messageText, 0, 0)
   table.insert(diededMessages, diededMessage3)
 
   diededMessage4 = love.graphics.newCanvas(width, 108)
   love.graphics.setCanvas(diededMessage4)
   messageText="WASTED"
-  love.graphics.print(messageText, width/2-dedfont:getWidth(messageText)/2, 0)
+  love.graphics.print(messageText, 0, 0)
   table.insert(diededMessages, diededMessage4)
 
   diededMessage5 = love.graphics.newCanvas(width, 108)
   love.graphics.setCanvas(diededMessage5)
   messageText="REKT"
-  love.graphics.print(messageText, width/2-dedfont:getWidth(messageText)/2, 0)
+  love.graphics.print(messageText, 0, 0)
   table.insert(diededMessages, diededMessage5)
 
   diededMessage6 = love.graphics.newCanvas(width, 108)
   love.graphics.setCanvas(diededMessage6)
   messageText="ULTRA DED"
-  love.graphics.print(messageText, width/2-dedfont:getWidth(messageText)/2, 0)
+  love.graphics.print(messageText, 0, 0)
   table.insert(diededMessages, diededMessage6)
 
   diededMessage7 = love.graphics.newCanvas(width, 108)
   love.graphics.setCanvas(diededMessage7)
   messageText="DEADFUL"
-  love.graphics.print(messageText, width/2-dedfont:getWidth(messageText)/2, 0)
+  love.graphics.print(messageText, 0, 0)
   table.insert(diededMessages, diededMessage7)
 
   diededMessage8 = love.graphics.newCanvas(width, 108)
   love.graphics.setCanvas(diededMessage8)
   messageText="INCREDIBLY DED"
-  love.graphics.print(messageText, width/2-dedfont:getWidth(messageText)/2, 0)
+  love.graphics.print(messageText, 0, 0)
   table.insert(diededMessages, diededMessage8)
 
   diededMessage9 = love.graphics.newCanvas(width, 108)
   love.graphics.setCanvas(diededMessage9)
   messageText="NOT LIVING"
-  love.graphics.print(messageText, width/2-dedfont:getWidth(messageText)/2, 0)
+  love.graphics.print(messageText, 0, 0)
   table.insert(diededMessages, diededMessage9)
 
   diededMessage10 = love.graphics.newCanvas(width, 108)
   love.graphics.setCanvas(diededMessage10)
   messageText="WELCOME TO DIE"
-  love.graphics.print(messageText, width/2-dedfont:getWidth(messageText)/2, 0)
+  love.graphics.print(messageText, 0, 0)
   table.insert(diededMessages, diededMessage10)
 
   love.graphics.setCanvas()
