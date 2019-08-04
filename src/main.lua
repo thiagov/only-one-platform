@@ -12,7 +12,7 @@ ScoreTick = require 'ScoreTick'
 width, height = 1920, 1080
 dedSize, dedBorder, dedTime = 200, 20, 2
 dedPosition = height/2-dedSize
-dedBlur, dedOpacity = 0.3, 0.5
+dedBlur, dedOpacity = 1, 0.5
 dedMove = 30
 ded = false
 
@@ -156,7 +156,13 @@ end
 
 
 function die()
-  dedStart = love.timer.getTime()
+  if not ded then
+    dedStart = love.timer.getTime()
+    aliveBGM:setVolume(0)
+    dedBGM:setVolume(0.7)
+    dedChord:play()
+  end
+  ded=true
 end
 
 
@@ -232,7 +238,8 @@ function drawDedAfter()
     love.graphics.setColor(1, 1, 1, math.min(dedOpacity*dedFinish/dedTime, dedOpacity))
     love.graphics.draw(vignetteLove, 0, dedPosition)
 
-    love.graphics.draw(dieded, width/2-dieded:getWidth()/2, dedPosition+dedSize/2-dieded:getHeight()/1.75+math.max(dedMove-dedMove*dedFinish/dedTime, 0))
+    --love.graphics.draw(dieded, width/2-dieded:getWidth()/2, dedPosition+dedSize/2-dieded:getHeight()/1.75+math.max(dedMove-dedMove*dedFinish/dedTime, 0))
+    love.graphics.draw(diededMessage1, 0, dedPosition+dedSize/2-dieded:getHeight()/1.75+math.max(dedMove-dedMove*dedFinish/dedTime, 0))
     love.graphics.setColor(1, 1, 1, 1)
   end
 end
@@ -368,6 +375,49 @@ function drawBG()
   drawStripes()
   drawLights()
 end
+
+function generateDiededMessages()
+  love.graphics.setFont(dedfont)
+
+  diededMessage1 = love.graphics.newCanvas(width, 108)
+  love.graphics.setCanvas(diededMessage1)
+  messageText="YOU DIEDED"
+  love.graphics.print(messageText, width/2-dedfont:getWidth(messageText)/2, 0)
+
+  diededMessage2 = love.graphics.newCanvas(width, 108)
+  love.graphics.setCanvas(diededMessage2)
+  messageText="DED"
+  love.graphics.print(messageText, width/2-dedfont:getWidth(messageText)/2, 0)
+
+  diededMessage3 = love.graphics.newCanvas(width, 108)
+  love.graphics.setCanvas(diededMessage3)
+  messageText="VERY DEAD"
+  love.graphics.print(messageText, width/2-dedfont:getWidth(messageText)/2, 0)
+
+  diededMessage4 = love.graphics.newCanvas(width, 108)
+  love.graphics.setCanvas(diededMessage4)
+  messageText="WASTED"
+  love.graphics.print(messageText, width/2-dedfont:getWidth(messageText)/2, 0)
+
+  diededMessage5 = love.graphics.newCanvas(width, 108)
+  love.graphics.setCanvas(diededMessage5)
+  messageText="REKT"
+  love.graphics.print(messageText, width/2-dedfont:getWidth(messageText)/2, 0)
+
+  diededMessage6 = love.graphics.newCanvas(width, 108)
+  love.graphics.setCanvas(diededMessage6)
+  messageText="ULTRA DED"
+  love.graphics.print(messageText, width/2-dedfont:getWidth(messageText)/2, 0)
+
+  diededMessage7 = love.graphics.newCanvas(width, 108)
+  love.graphics.setCanvas(diededMessage7)
+  messageText="DEADFUL"
+  love.graphics.print(messageText, width/2-dedfont:getWidth(messageText)/2, 0)
+
+  love.graphics.setCanvas()
+  love.graphics.setFont(font)
+end
+
 -------COPIED BY P END----------
 
 
@@ -408,11 +458,28 @@ function love.load()
 
   roughEffect = love.graphics.newImage("roughEffect.png")
 
+  dedfont = love.graphics.newImageFont("assets/dedfont.png", " ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+  generateDiededMessages()
+
+  --sound
+  aliveBGM = love.audio.newSource("assets/sound/alive.wav", "stream")
+  dedBGM = love.audio.newSource("assets/sound/ded.wav", "stream")
+  dedChord = love.audio.newSource("assets/sound/dedchord.wav", "static")
+
+
+  aliveBGM:setLooping(true)
+  aliveBGM:play()
+  aliveBGM:setVolume(0.7)
+  dedBGM:setLooping(true)
+  dedBGM:play()
+  dedBGM:setVolume(0)
+
+
 ----COPIAR AQUI TAMBÉM--initializeDed aqui
   initializeDed()
 
 ----COPIAR AQUI TAMBÉM--morrer instantâneamente para testar xD
-  die()
+  --die()
 end
 
 -- Called continuously. dt = delta time
@@ -434,6 +501,7 @@ function love.update(dt)
   updateResult = love.timer.getTime() - updateStart
 
   animateBG(dt)
+
 end
 
 -- All drawing comes here
@@ -461,6 +529,9 @@ function love.draw()
 ----COPIAR AQUI TAMBÉM--depois de tudo, drawDedAfter
   drawDedAfter()
 
+  --love.graphics.setFont(dedfont)
+  --love.graphics.print("DED", 300, 400)
+  --love.graphics.setFont(font)
 
   drawResult = love.timer.getTime() - drawStart
   drawUpdateDrawBars()
@@ -540,7 +611,7 @@ end
 
 function computeGameOver()
   if heroInstance.y > height then
-    -- print('morreu')
+    die()
   end
 end
 
