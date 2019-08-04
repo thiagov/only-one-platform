@@ -110,7 +110,6 @@ function generateBlurWeights(number)
    for i,v in ipairs(weights) do
       sum = sum + v
    end
-   print("sum: " .. tostring(sum) .. " (should be 1)")
    
    local substitutionString = ""
    -- pixelColor += Texel(currentTexture, vBlurOffsets[13])*0.0044299121055113265;
@@ -118,15 +117,18 @@ function generateBlurWeights(number)
    local inserted = false
    local stepsize = 1
    for i = 0,number,1 do
-      if index+1 > number/2 and not inserted then
-   substitutionString = substitutionString .. "pixelColor += Texel(currentTexture, texCoords       )*".. tostring(weights[number/2]) ..";\n"
-   inserted = true
-      else
-   -- note that this expression uses both "i" and "index"
-   substitutionString = substitutionString .. "pixelColor += Texel(currentTexture, vBlurOffsets[" .. tostring(index) .."])*" .. tostring(weights[i+1]) .. ";\n"
-   index = index+1
-      end
+     if index+1 > number/2 and not inserted then
+       substitutionString = substitutionString .. "pixelColor += Texel(currentTexture, texCoords)*".. tostring(weights[number/2]) ..";\n"
+       inserted = true
+     else
+       -- note that this expression uses both "i" and "index"
+       substitutionString = substitutionString .. "pixelColor += Texel(currentTexture, vBlurOffsets[" .. tostring(index) .."])*" .. tostring(weights[i+1]) .. ";\n"
+       index = index+1
+     end
    end
+   print("--------")
+   print(substitutionString)
+   print("--------")
    return substitutionString
 end
 
@@ -144,8 +146,8 @@ function loadShader()
    print(verticalVertexSource)
    
    local fragmentSource = love.filesystem.read("material.fsh")
-   fragmentSource = fragmentSource:gsub("${{GENERATE_BLUR_WEIGHTINGS}}", generateBlurWeights(blurSamples))
-   fragmentSource = fragmentSource:gsub("${{NUM_BLUR_SAMPLES}}", blurSamples)
+   -- fragmentSource = fragmentSource:gsub("${{GENERATE_BLUR_WEIGHTINGS}}", generateBlurWeights(blurSamples))
+   -- fragmentSource = fragmentSource:gsub("${{NUM_BLUR_SAMPLES}}", blurSamples)
    print(fragmentSource)
    
    horizontalShader = love.graphics.newShader(horizontalVertexSource, fragmentSource)
