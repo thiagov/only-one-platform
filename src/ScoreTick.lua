@@ -15,13 +15,17 @@ function ScoreTick:new(x, y, score)
     self.itemType = good
     self.text = "+"..self.score
     self.direction = up
-    self.color = {0, 1, 0, 1}
+    self.color = {0, 0.6, 0.2, 1}
   else
     self.itemType = bad
-    self.text = "-"..self.score
+    self.text = ""..self.score
     self.direction = down
     self.color = {1, 0, 0, 1}
   end
+  self.font = love.graphics.newImageFont("assets/scorefont.png",
+    " abcdefghijklmnopqrstuvwxyz" ..
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ0" ..
+    "123456789.,!?-+/():;%&`'*#=[]\"")
 end
 
 function ScoreTick:update(dt)
@@ -38,6 +42,7 @@ function ScoreTick:update(dt)
 end
 
 function ScoreTick:draw()
+  love.graphics.setFont(self.font)
   love.graphics.setColor(self.color)
   if self.visible then
     love.graphics.print(self.text, self.x, self.y)

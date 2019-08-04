@@ -3,6 +3,7 @@ Hero      = require 'Hero'
 Platform  = require 'Platform'
 Item      = require 'Item'
 ScoreTick = require 'ScoreTick'
+Score     = require 'Score'
 
 
 
@@ -427,8 +428,8 @@ function love.load()
   platformInstance = Platform(10, 200, 150, 50)
   itemsInstance = {}
   scoreTicksInstance = {}
-  heroInstance = Hero(0, 0, 400, 100, 150)
-  score = 0
+  heroInstance = Hero(0, 0, 400, 96, 117)
+  scoreInstance = Score(width/2-50, 10)
   generationTime = 0
 
   --bg images
@@ -488,6 +489,7 @@ function love.update(dt)
   end
   local removedItems = handleCollision()
   updateScore(removedItems)
+  scoreInstance:update(dt)
   removeItemsOutOfWorld()
   computeGameOver()
   generateRandomItems(dt)
@@ -515,6 +517,7 @@ function love.draw()
     scoreTick:draw()
   end
 
+  scoreInstance:draw()
 
   --depois de desenhar tudo, efeito legal
   drawRoughEffect()
@@ -528,8 +531,6 @@ function love.draw()
 
   drawResult = love.timer.getTime() - drawStart
   drawUpdateDrawBars()
-
-  love.graphics.print("Score: "..score, width - 100, 0)
 end
 
 function drawUpdateDrawBars()
@@ -572,9 +573,9 @@ function handleCollision()
   return removed
 end
 
-function updateScore(removed)
+function updateScore(removed, dt)
   for i, item in ipairs(removed) do
-    score = score + item.score
+    scoreInstance:updateScore(item)
     table.insert(scoreTicksInstance, ScoreTick(item.x+item.width/2, item.y+item.height/2, item.score))
   end
 end
