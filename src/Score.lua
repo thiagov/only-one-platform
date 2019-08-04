@@ -11,6 +11,18 @@ function Score:new(x, y)
     " abcdefghijklmnopqrstuvwxyz" ..
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ0" ..
     "123456789.,!?-+/():;%&`'*#=[]\"")
+  self.redSounds = {
+    love.audio.newSource("assets/sound/get01.ogg", "static"),
+    love.audio.newSource("assets/sound/get02.ogg", "static"),
+    love.audio.newSource("assets/sound/get03.ogg", "static"),
+    love.audio.newSource("assets/sound/get04.ogg", "static"),
+    love.audio.newSource("assets/sound/get05.ogg", "static"),
+    love.audio.newSource("assets/sound/get06.ogg", "static"),
+    love.audio.newSource("assets/sound/get07.ogg", "static")
+  }
+  self.goldenSound = love.audio.newSource("assets/sound/getgold.ogg", "static")
+  self.skullSound = love.audio.newSource("assets/sound/getskull.ogg", "static")
+  self.currentSound = 1
 end
 
 function Score:update(dt)
@@ -18,6 +30,21 @@ end
 
 function Score:updateScore(item)
   self.score = self.score + item.score
+  if item.itemType == Item.itemTypes.good then
+    self.redSounds[self.currentSound]:setVolume(0.4)
+    self.redSounds[self.currentSound]:play()
+    if self.currentSound + 1 > #self.redSounds then
+      self.currentSound = 1
+    else
+      self.currentSound = self.currentSound + 1
+    end
+  elseif item.itemType == Item.itemTypes.gooder then
+    self.goldenSound:setVolume(0.4)
+    self.goldenSound:play()
+  else
+    self.skullSound:setVolume(0.4)
+    self.skullSound:play()
+  end
 end
 
 function Score:draw()
