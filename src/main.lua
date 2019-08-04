@@ -95,7 +95,6 @@ function die()
 end
 
 function initializeDed()
-  dieded = love.graphics.newImage("ded.png")
   dedShader = love.graphics.newShader("ded.lua")
 
   loadShader()
@@ -162,8 +161,7 @@ function drawDedAfter()
     love.graphics.setColor(1, 1, 1, math.min(dedOpacity*dedFinish/dedTime, dedOpacity))
     love.graphics.draw(vignetteLove, 0, dedPosition)
 
-    --love.graphics.draw(dieded, width/2-dieded:getWidth()/2, dedPosition+dedSize/2-dieded:getHeight()/1.75+math.max(dedMove-dedMove*dedFinish/dedTime, 0))
-    love.graphics.draw(diededMessages[chosenDiededMessage], 0, dedPosition+dedSize/2-dieded:getHeight()/1.75+math.max(dedMove-dedMove*dedFinish/dedTime, 0))
+    love.graphics.draw(diededMessages[chosenDiededMessage], 0, dedPosition+dedSize/2-108/1.75+math.max(dedMove-dedMove*dedFinish/dedTime, 0))
     love.graphics.setColor(1, 1, 1, 1)
   end
 end
@@ -415,7 +413,7 @@ function love.load()
   
   bgTimeStart = love.timer.getTime() + 20*1000*1000
 
-  roughEffect = love.graphics.newImage("roughEffect.png")
+  roughEffect = love.graphics.newImage("assets/roughEffect.png")
 
   dedfont = love.graphics.newImageFont("assets/dedfont.png", " ABCDEFGHIJKLMNOPQRSTUVWXYZ")
   generateDiededMessages()
