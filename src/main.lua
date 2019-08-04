@@ -425,7 +425,7 @@ function love.load()
   xs = desktopWidth/width
   ys = desktopHeight/height
   font = love.graphics.newFont(14)
-  platformInstance = Platform(10, 200, 150, 50)
+  platformInstance = Platform(10, 200, 150, 50, xs, ys)
   itemsInstance = {}
   scoreTicksInstance = {}
   heroInstance = Hero(0, 0, 400, 96, 117)
@@ -510,6 +510,7 @@ function love.draw()
 
   drawBG()
 
+  love.mouse.setVisible(false)
   platformInstance:draw()
   heroInstance:draw()
   for i, item in ipairs(itemsInstance) do
