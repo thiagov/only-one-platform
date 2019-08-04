@@ -424,10 +424,10 @@ function love.load()
   xs = desktopWidth/width
   ys = desktopHeight/height
   font = love.graphics.newFont(14)
-  platformInstance = Platform(10, 200, 150, 50, xs, ys)
+  platformInstance = Platform(10, 150, 150, 50, xs, ys)
   itemsInstance = {}
   scoreTicksInstance = {}
-  heroInstance = Hero(0, 0, 400, 96, 117)
+  heroInstance = Hero(35, -96, 400, 96, 117)
   scoreInstance = Score(width/2-50, 10)
   controllersInstace = Controllers(width/2-50, height/2)
   generationTime = 0
