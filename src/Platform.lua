@@ -14,6 +14,9 @@ end
 function Platform:updatePosition(x, y)
   self.x = x;
   self.y = y;
+  self.sound = love.audio.newSource("assets/sound/platform.ogg", "static")
+  self.sound:setVolume(0.4)
+  self.sound:play()
 end
 
 function Platform:update(dt)
