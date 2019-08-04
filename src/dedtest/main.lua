@@ -4,7 +4,7 @@ dedSize, dedBorder, dedTime = 200, 20, 2
 dedPosition = height/2-dedSize
 dedBlur, dedOpacity = 0.3, 0.5
 dedMove = 30
-ded = true
+ded = false
 
 -- Generate vignette
 function generateVignette(size, border)
@@ -152,7 +152,6 @@ end
 
 function initializeDed()
   dieded = love.graphics.newImage("ded.png")
-  roughEffect = love.graphics.newImage("roughEffect.png")
   dedShader = love.graphics.newShader("ded.lua")
 
   loadShader()
@@ -229,17 +228,37 @@ function love.load()
   font = love.graphics.newFont(14)
   love.mouse.setVisible(false)
 
+
+  --bg images
+  bgNeutral = love.graphics.newImage("bg/bg-neutral.png")
+  bgStripes = love.graphics.newImage("bg/stripes.png")
+  bgUnitHeight = bgNeutral:getHeight()
+
+  light1 = love.graphics.newImage("bg/light1.png")
+  light2 = love.graphics.newImage("bg/light2.png")
+  light3 = love.graphics.newImage("bg/light3.png")
+  light4 = love.graphics.newImage("bg/light4.png")
+  --bgVignette = love.graphics.newImage("bg/vignette.png")
+
+  lightCanvas = love.graphics.newCanvas()
+  
+  bgTimeStart = love.timer.getTime() + 20*1000*1000
+
+  roughEffect = love.graphics.newImage("roughEffect.png")
+
 ----COPIAR AQUI TAMBÉM--initializeDed aqui
   initializeDed()
 
 ----COPIAR AQUI TAMBÉM--morrer instantâneamente para testar xD
   die()
-
 end
 
 -- Called continuously. dt = delta time
 function love.update(dt)
   updateStart = love.timer.getTime()
+
+  animateBG(dt)
+
   updateResult = love.timer.getTime() - updateStart
 end
 
@@ -256,6 +275,8 @@ function love.draw()
   love.graphics.rectangle("fill", 0, 0, width, height)
   love.graphics.setColor(1, 1, 1)
   love.graphics.draw(image, 200, 270)
+
+  drawBG()
 
   --depois de desenhar tudo, efeito legal
   drawRoughEffect()
@@ -290,4 +311,103 @@ function drawUpdateDrawBars()
   love.graphics.setColor(1, 1, 1)
   love.graphics.print("Update: "..updateResult*1000 .."ms", 10, height-barHeight*2+barHeight/2-fontHeight/2)
   love.graphics.print("Draw: "..updateResult*1000 .."ms", 10, height-barHeight+barHeight/2-fontHeight/2)
+end
+
+
+function rgb(r, g, b, a)
+  if not a then a=1 end
+  return {r/255, g/255, b/255, a}
+end
+
+function rgba(rgbcolor,a)
+  return {rgbcolor[1],rgbcolor[2],rgbcolor[3],a}
+end
+
+-- BG colours
+bgColor = {
+  rgb(255,190,51),--1
+  rgb(247,182,49),--2
+  rgb(240,173,48),--3
+  rgb(229,161,46),--4
+  rgb(225,156,45)--5
+
+}
+
+
+-- BG coordinates
+bgX = {0,-120,-480,0, -120,-480,0,-120}
+bgVX = {300,100,200,400, 500,300,200,400}
+bgy, bgGap = -100, 150--135
+bgUnitHeight = 0
+
+function tableLength(T)
+  local count = 0
+  for _ in pairs(T) do count = count + 1 end
+  return count
+end
+
+function cycleColor(min, max)
+  if math.floor(min/max)%2==1 then return max-(min%max+1)
+  else return min%max+1 end
+end
+
+function animateBG(dt)
+  for i=1,tableLength(bgX),1 do
+    bgX[i] = bgX[i] - bgVX[i]*dt
+    bgX[i] = bgX[i]%(width/2)-width
+  end
+end
+
+-- Light values
+lightGeneralPace = 3
+lightPace = {0.05*lightGeneralPace,0.09*lightGeneralPace,0.11*lightGeneralPace,0.07*lightGeneralPace}
+lightMax = {0.8,0.05,0.8,0.7}
+lightMin = {0.05,0,0.1,0}
+
+lightsMaxOpacity = 0.8
+lightAngle = {0,0.1,0,0.1}
+
+function drawBG()
+  local originalCanvas = love.graphics.getCanvas()
+  love.graphics.setColor(bgColor[1])
+  love.graphics.rectangle("fill", 0, 0, width, height)
+
+  for i=1, tableLength(bgX), 1 do
+    love.graphics.setColor(bgColor[cycleColor(i,tableLength(bgColor))])
+    love.graphics.rectangle("fill", 0, bgy+bgGap*(i-1)+bgUnitHeight, width, bgUnitHeight+bgGap)
+    love.graphics.draw(bgNeutral,bgX[i], bgy+bgGap*(i-1))
+    love.graphics.draw(bgNeutral,bgX[i]+width, bgy+bgGap*(i-1))    
+  end
+
+  love.graphics.setColor(bgColor[1])
+  love.graphics.draw(bgStripes, 0, 0)
+
+  love.graphics.setColor(bgColor[1])
+  love.graphics.draw(bgStripes, width, height, 0, -1, -1)
+
+  bgTime = love.timer.getTime() - bgTimeStart
+  love.graphics.setCanvas(lightCanvas)
+  love.graphics.clear()
+  love.graphics.setColor(1,1,1,math.abs(math.sin(bgTime*lightPace[1]))*lightMax[1]+lightMin[1])
+  love.graphics.draw(light1, 0, 0)
+  love.graphics.setColor(1,1,1,math.abs(math.sin(bgTime*lightPace[2]))*lightMax[2]+lightMin[2])
+  love.graphics.draw(light2, light2:getWidth()/2, light2:getHeight()/2-200, lightAngle[2], 1, 1, light2:getWidth()/2, light2:getHeight()/2)
+  love.graphics.setColor(1,1,1,math.abs(math.sin(bgTime*lightPace[3]))*lightMax[3]+lightMin[3])
+  love.graphics.draw(light3, light3:getWidth()/2, light3:getHeight()/2-100, lightAngle[3], 1, 1, light3:getWidth()/2, light3:getHeight()/2)
+  love.graphics.setColor(1,1,1,math.abs(math.sin(bgTime*lightPace[4]))*lightMax[4]+lightMin[4])
+  love.graphics.draw(light4, light4:getWidth()/2-100, light4:getHeight()/2, lightAngle[4], 1, 1, light4:getWidth()/2, light4:getHeight()/2)
+
+  love.graphics.setBlendMode("add")
+  love.graphics.setCanvas(originalCanvas)
+  love.graphics.setColor(1,1,1,lightsMaxOpacity)
+  love.graphics.draw(lightCanvas, 0, 0)
+  love.graphics.setBlendMode("alpha")
+  love.graphics.setColor(1,1,1,1)
+
+  --love.graphics.setColor(1,1,1,1)
+  --love.graphics.draw(bgVignette, 0, 0)
+  --love.graphics.setColor(1,1,1,1)
+
+  --love.graphics.setColor(1, 0, 0, 1)
+  --love.graphics.rectangle("fill", 200, math.sin(bgTime*10)*100+200, 10, 10)
 end
