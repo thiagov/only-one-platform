@@ -6,6 +6,7 @@ local falling, jumping, idle = "falling", "jumping", "idle"
 
 function Hero:new(x, y, speed, width, height)
   self.idleSprite = love.graphics.newImage("assets/sprites/idle.png")
+  self.gagAnim = Animation(love.graphics.newImage("assets/sprites/gag.png"), 100, 150, 0.8)
   self.walkAnim = Animation(love.graphics.newImage("assets/sprites/walking.png"), 96, 117, 0.5)
   self.animation = "idle"
   self.x = x
@@ -30,6 +31,7 @@ function Hero:update(dt, platform, items)
     end
   else
     self.animation = "idle"
+    self.gagAnim:update(dt)
   end
 
   local probablyNewY = self.y + dt * self.velocity
@@ -62,6 +64,7 @@ function Hero:draw()
   else
     love.graphics.draw(self.idleSprite, self.x, self.y)
   end
+  self.gagAnim:draw(self.x, self.y-15)
 end
 
 return Hero;
