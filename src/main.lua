@@ -162,7 +162,8 @@ end
 
 function drawDedBefore()
   if ded then
-    love.graphics.setCanvas(canvasA)--here!
+    -- love.graphics.scale(1/xs, 1/ys)
+    -- love.graphics.setCanvas(canvasA)--here!
     dedFinish = love.timer.getTime() - dedStart
     dedShader:send("timing", dedFinish)
     dedShader:send("maxTiming", dedTime*1000)
