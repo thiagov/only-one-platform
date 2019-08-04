@@ -530,7 +530,7 @@ function love.draw()
   --love.graphics.setFont(font)
 
   drawResult = love.timer.getTime() - drawStart
-  drawUpdateDrawBars()
+  --drawUpdateDrawBars()
 end
 
 function drawUpdateDrawBars()
