@@ -6,15 +6,6 @@ ScoreTick   = require 'ScoreTick'
 Score       = require 'Score'
 Controllers = require 'Controllers'
 
--------COPIED BY P----------
--- Vignette stuff
-width, height = 1920, 1080
-dedSize, dedBorder, dedTime = 200, 20, 2
-dedPosition = height/2-dedSize
-dedBlur, dedOpacity = 1, 0.5
-dedMove = 30
-ded = false
-
 -- Generate vignette
 function generateVignette(size, border)
   vignette = love.graphics.newCanvas(width, size)
@@ -32,7 +23,6 @@ function generateVignette(size, border)
   return vignette
 end
 
-
 -- Draw feathered borders
 function drawFeatheredBorders(drawable, position, size, border)
   for i=1, border+1, 1 do
@@ -48,20 +38,6 @@ function drawFeatheredBorders(drawable, position, size, border)
   love.graphics.draw(drawable, quadfulC, 0, position+border)
 end
 
-
--- Blur shader stuff
-horizontalShader = nil
-verticalShader = nil
-canvasA, canvasB, canvasC = nil, nil, nil
-
-function gaussianSquared(x, size)
-   local radius = size/2
-   local sigma = radius
-   local value = (1/(sigma*math.sqrt(2*math.pi)))
-      * math.exp((-x*x)/(2*sigma*sigma))
-   return value*value
-end
-
 function generateHorizontalCoordinateOffsets(number)
    local substitutionString = ""
    -- vBlurOffsets[ 6] = VertexTexCoord.xy + prescaler*vec2(-1, 0.0)/love_ScreenSize.x;
@@ -75,6 +51,7 @@ function generateHorizontalCoordinateOffsets(number)
    end
    return substitutionString
 end
+
 function generateVerticalCoordinateOffsets(number)
    local substitutionString = ""
    -- vBlurOffsets[ 0] = VertexTexCoord.xy + prescaler*vec2(0.0, -7)/love_ScreenSize.y;
@@ -87,16 +64,6 @@ function generateVerticalCoordinateOffsets(number)
       end
    end
    return substitutionString
-end
-
-function normalize(weights)
-   local sum = 0
-   for i,v in ipairs(weights) do
-      sum = sum + v
-   end
-   for i,v in ipairs(weights) do
-      weights[i] = v*(1/sum)
-   end
 end
 
 function loadShader()
@@ -115,7 +82,6 @@ function loadShader()
    verticalShader = love.graphics.newShader(verticalVertexSource, fragmentSource)
 end
 
-
 function die()
   if not ded then
     dedStart = love.timer.getTime()
@@ -128,14 +94,12 @@ function die()
   ded=true
 end
 
-
 function initializeDed()
   dieded = love.graphics.newImage("ded.png")
   dedShader = love.graphics.newShader("ded.lua")
 
   loadShader()
   canvasA, canvasB, canvasC = love.graphics.newCanvas(), love.graphics.newCanvas(), love.graphics.newCanvas()
-
 
   vignetteLove = generateVignette(dedSize, dedBorder)
   quadful = love.graphics.newQuad(0, dedPosition, width, dedSize, width, height)
@@ -214,22 +178,6 @@ function rgba(rgbcolor,a)
   return {rgbcolor[1],rgbcolor[2],rgbcolor[3],a}
 end
 
--- BG colours
-bgColor = {
-  rgb(255,190,51),--1
-  rgb(247,182,49),--2
-  rgb(240,173,48),--3
-  rgb(229,161,46),--4
-  rgb(225,156,45)--5
-}
-
-
--- BG coordinates
-bgX = {0,-120,-480,0, -120,-480,0,-120}
-bgVX = {300,100,200,400, 500,300,200,400}
-bgy, bgGap = -100, 150--135
-bgUnitHeight = 0
-
 function tableLength(T)
   local count = 0
   for _ in pairs(T) do count = count + 1 end
@@ -249,26 +197,6 @@ function animateBG(dt)
 
   moveStars(dt)
 end
-
--- Light values
-lightGeneralPace = 3
-lightPace = {0.05*lightGeneralPace,0.09*lightGeneralPace,0.11*lightGeneralPace,0.07*lightGeneralPace}
-lightMax = {0.8,0.05,0.8,0.7}
-lightMin = {0.05,0,0.1,0}
-
-lightsMaxOpacity = 0.8
-lightAngle = {0,0.1,0,0.1}
-
--- Star values
-starRows = 8
-starColumns = 24
-starX, starY = -190, -160
-starRowX = {0,0,0,0, 0,0,0,0}
-starPaddingX, starPaddingY = 200, 150
-starVX = {150,250,200,100, 50,150,200,100}
-starRotation = 0
-starVRotation = 0.5
-starRotationCoefficientX, starRotationCoefficientY = 0.3, 0.3
 
 function moveStars(dt)
   for i=1, starRows, 1 do
@@ -411,6 +339,7 @@ end
 
 -- Load resources
 function love.load()
+  love.graphics.reset( )
   math.randomseed(os.time())
   love.window.setFullscreen(true, "desktop")
   desktopWidth, desktopHeight, flags = love.window.getMode( )
@@ -425,6 +354,48 @@ function love.load()
   scoreInstance = Score(width/2-50, 10)
   controllersInstace = Controllers(width/2-50, height/2)
   generationTime = 0
+
+  -- Vignette stuff
+  width, height = 1920, 1080
+  dedSize, dedBorder, dedTime = 200, 20, 2
+  dedPosition = height/2-dedSize
+  dedBlur, dedOpacity = 1, 0.5
+  dedMove = 30
+  ded = false
+  -- Blur shader stuff
+  horizontalShader = nil
+  verticalShader = nil
+  canvasA, canvasB, canvasC = nil, nil, nil
+  -- BG colours
+  bgColor = {
+    rgb(255,190,51),--1
+    rgb(247,182,49),--2
+    rgb(240,173,48),--3
+    rgb(229,161,46),--4
+    rgb(225,156,45)--5
+  }
+  -- BG coordinates
+  bgX = {0,-120,-480,0, -120,-480,0,-120}
+  bgVX = {300,100,200,400, 500,300,200,400}
+  bgy, bgGap = -100, 150--135
+  bgUnitHeight = 0
+  -- Light values
+  lightGeneralPace = 3
+  lightPace = {0.05*lightGeneralPace,0.09*lightGeneralPace,0.11*lightGeneralPace,0.07*lightGeneralPace}
+  lightMax = {0.8,0.05,0.8,0.7}
+  lightMin = {0.05,0,0.1,0}
+  lightsMaxOpacity = 0.8
+  lightAngle = {0,0.1,0,0.1}
+  -- Star values
+  starRows = 8
+  starColumns = 24
+  starX, starY = -190, -160
+  starRowX = {0,0,0,0, 0,0,0,0}
+  starPaddingX, starPaddingY = 200, 150
+  starVX = {150,250,200,100, 50,150,200,100}
+  starRotation = 0
+  starVRotation = 0.5
+  starRotationCoefficientX, starRotationCoefficientY = 0.3, 0.3
 
   --bg images
   bgNeutral = love.graphics.newImage("bg/bg-neutral.png")
@@ -450,10 +421,11 @@ function love.load()
   generateDiededMessages()
 
   --sound
-  aliveBGM = love.audio.newSource("assets/sound/alive.wav", "stream")
-  dedBGM = love.audio.newSource("assets/sound/ded.wav", "stream")
-  dedChord = love.audio.newSource("assets/sound/dedchord.wav", "static")
-
+  if aliveBGM == nil then
+    aliveBGM = love.audio.newSource("assets/sound/alive.wav", "stream")
+    dedBGM = love.audio.newSource("assets/sound/ded.wav", "stream")
+    dedChord = love.audio.newSource("assets/sound/dedchord.wav", "static")
+  end
 
   aliveBGM:setLooping(true)
   aliveBGM:play()
@@ -461,7 +433,6 @@ function love.load()
   dedBGM:setLooping(true)
   dedBGM:play()
   dedBGM:setVolume(0)
-
 
 ----COPIAR AQUI TAMBÉM--initializeDed aqui
   initializeDed()
@@ -514,7 +485,7 @@ function love.draw()
   end
 
   scoreInstance:draw()
-  controllersInstace:draw()
+  controllersInstace:draw(ded)
 
   --depois de desenhar tudo, efeito legal
   drawRoughEffect()
@@ -557,6 +528,12 @@ end
 function love.mousepressed(x, y, button, istouch)
   if button == 1 then
     platformInstance:updatePosition(x/xs - platformInstance.width/2, y/ys - platformInstance.height/2)
+  end
+end
+
+function love.keypressed(key, scancode, isrepeat)
+  if key == "return" and ded then
+    love.load()
   end
 end
 

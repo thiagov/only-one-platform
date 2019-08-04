@@ -6,6 +6,7 @@ function Controllers:new(x, y)
   self.y = y-60
   self.fontSize = 20
   self.color = {1, 1, 1, 1}
+  self.deadColor = {1, 1, 1, 1}
   self.onlyColor = {0.33, 0.784, 0, 1}
   self.oneColor = {1, 0, 0.376, 1}
   self.font = love.graphics.newImageFont("assets/scorefont.png",
@@ -24,8 +25,8 @@ function Controllers:update(dt)
   end
 end
 
-function Controllers:draw()
-  if self.ttl > 0 then
+function Controllers:draw(dead)
+  if self.ttl > 0 and not dead then
     love.graphics.setFont(self.font)
     love.graphics.setColor(self.color)
     local messageText = "A and D: move"
@@ -47,6 +48,11 @@ function Controllers:draw()
     messageText = " platform"
     love.graphics.setColor(self.color)
     love.graphics.print(messageText, newX, self.y+80)
+  end
+  if dead then
+    love.graphics.setColor(self.deadColor)
+    local messageText = "Press enter to restart..."
+    love.graphics.print(messageText, self.x-self.font:getWidth(messageText)/2, height - 200)
   end
 end
 
