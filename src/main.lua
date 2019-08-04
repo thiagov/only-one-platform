@@ -1,12 +1,10 @@
-Object    = require 'libs/classic'
-Hero      = require 'Hero'
-Platform  = require 'Platform'
-Item      = require 'Item'
-ScoreTick = require 'ScoreTick'
-Score     = require 'Score'
-
-
-
+Object      = require 'libs/classic'
+Hero        = require 'Hero'
+Platform    = require 'Platform'
+Item        = require 'Item'
+ScoreTick   = require 'ScoreTick'
+Score       = require 'Score'
+Controllers = require 'Controllers'
 
 -------COPIED BY P----------
 -- Vignette stuff
@@ -431,6 +429,7 @@ function love.load()
   scoreTicksInstance = {}
   heroInstance = Hero(0, 0, 400, 96, 117)
   scoreInstance = Score(width/2-50, 10)
+  controllersInstace = Controllers(width/2-50, height/2)
   generationTime = 0
 
   --bg images
@@ -491,6 +490,7 @@ function love.update(dt)
   local removedItems = handleCollision()
   updateScore(removedItems)
   scoreInstance:update(dt)
+  controllersInstace:update(dt)
   removeItemsOutOfWorld()
   computeGameOver()
   generateRandomItems(dt)
@@ -519,6 +519,7 @@ function love.draw()
   end
 
   scoreInstance:draw()
+  controllersInstace:draw()
 
   --depois de desenhar tudo, efeito legal
   drawRoughEffect()

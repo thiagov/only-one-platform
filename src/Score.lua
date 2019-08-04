@@ -6,7 +6,6 @@ function Score:new(x, y)
   self.y = y
   self.fontSize = 20
   self.color = {1, 1, 1, 1}
-  --self.font = love.graphics.newImageFont("assets/dedfont.png", " ABCDEFGHIJKLMNOPQRSTUVWXYZ")
   self.font = love.graphics.newImageFont("assets/scorefont.png",
     " abcdefghijklmnopqrstuvwxyz" ..
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ0" ..
@@ -23,7 +22,8 @@ end
 function Score:draw()
   love.graphics.setFont(self.font)
   love.graphics.setColor(self.color)
-  love.graphics.print("Score: "..self.score, self.x, self.y)
+  local messageText = "Score: "..self.score
+  love.graphics.print(messageText, self.x-self.font:getWidth(messageText)/2, self.y)
 end
 
 return Score;
