@@ -422,8 +422,8 @@ function love.load()
 
   --sound
   if aliveBGM == nil then
-    aliveBGM = love.audio.newSource("assets/sound/alive.wav", "stream")
-    dedBGM = love.audio.newSource("assets/sound/ded.wav", "stream")
+    aliveBGM = love.audio.newSource("assets/sound/alive2.ogg", "stream")
+    dedBGM = love.audio.newSource("assets/sound/ded2.ogg", "stream")
     dedChord = love.audio.newSource("assets/sound/dedchord.wav", "static")
   end
 
