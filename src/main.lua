@@ -100,38 +100,6 @@ function normalize(weights)
    end
 end
 
-function generateBlurWeights(number)
-   local weights = {}
-   for i = 1, number+1 do
-      weights[i] = gaussianSquared((i-1) - number/2, number)
-   end
-   normalize(weights)
-   local sum = 0
-   for i,v in ipairs(weights) do
-      sum = sum + v
-   end
-   
-   local substitutionString = ""
-   -- pixelColor += Texel(currentTexture, vBlurOffsets[13])*0.0044299121055113265;
-   local index = 0
-   local inserted = false
-   local stepsize = 1
-   for i = 0,number,1 do
-     if index+1 > number/2 and not inserted then
-       substitutionString = substitutionString .. "pixelColor += Texel(currentTexture, texCoords)*".. tostring(weights[number/2]) ..";\n"
-       inserted = true
-     else
-       -- note that this expression uses both "i" and "index"
-       substitutionString = substitutionString .. "pixelColor += Texel(currentTexture, vBlurOffsets[" .. tostring(index) .."])*" .. tostring(weights[i+1]) .. ";\n"
-       index = index+1
-     end
-   end
-   print("--------")
-   print(substitutionString)
-   print("--------")
-   return substitutionString
-end
-
 function loadShader()
    local blurSamples = 16 -- has to be even, 30 is max on nvidia hardware, 16 on ES2.0 hardware.
    local horizontalVertexSource = love.filesystem.read("material-horizontal.vsh")
@@ -146,8 +114,6 @@ function loadShader()
    print(verticalVertexSource)
    
    local fragmentSource = love.filesystem.read("material.fsh")
-   -- fragmentSource = fragmentSource:gsub("${{GENERATE_BLUR_WEIGHTINGS}}", generateBlurWeights(blurSamples))
-   -- fragmentSource = fragmentSource:gsub("${{NUM_BLUR_SAMPLES}}", blurSamples)
    print(fragmentSource)
    
    horizontalShader = love.graphics.newShader(horizontalVertexSource, fragmentSource)
@@ -176,6 +142,7 @@ function initializeDed()
 
   loadShader()
   canvasA, canvasB, canvasC = love.graphics.newCanvas(), love.graphics.newCanvas(), love.graphics.newCanvas()
+
 
   vignetteLove = generateVignette(dedSize, dedBorder)
   quadful = love.graphics.newQuad(0, dedPosition, width, dedSize, width, height)
@@ -234,11 +201,6 @@ function drawDedAfter()
     drawFeatheredBorders(canvasC, dedPosition, dedSize, dedBorder)
     love.graphics.draw(canvasC, quadful, 0, dedPosition)  
   
-
-
-
-
-
     love.graphics.setColor(1, 1, 1, math.min(dedOpacity*dedFinish/dedTime, dedOpacity))
     love.graphics.draw(vignetteLove, 0, dedPosition)
 
