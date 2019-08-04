@@ -87,6 +87,7 @@ function die()
     dedStart = love.timer.getTime()
     aliveBGM:setVolume(0)
     dedBGM:setVolume(0.7)
+    dedChord:setVolume(0.4)
     dedChord:play()
     chosenDiededMessage = math.random(1,tableLength(diededMessages))
   end
