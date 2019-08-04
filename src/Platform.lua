@@ -1,10 +1,14 @@
 local Platform = Object:extend()
 
-function Platform:new(x, y, width, height)
+function Platform:new(x, y, width, height, xs, ys)
+  self.sprite = love.graphics.newImage("assets/sprites/platform.png")
+  self.mouseSprite = love.graphics.newImage("assets/sprites/platformMouse.png")
   self.width = width
   self.height = height
   self.x = x
   self.y = y
+  self.xs = xs
+  self.ys = ys
 end
 
 function Platform:updatePosition(x, y)
@@ -16,8 +20,13 @@ function Platform:update(dt)
 end
 
 function Platform:draw()
-  love.graphics.setColor(1, 1, 1)
-  love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
+  if false then
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
+  end
+  love.graphics.draw(self.sprite, self.x, self.y-30)
+  local mouseX, mouseY = love.mouse.getPosition()
+  love.graphics.draw(self.mouseSprite, mouseX/self.xs-150/2, mouseY/self.ys-(84+30)/2)
 end
 
 return Platform;
