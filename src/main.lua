@@ -587,8 +587,7 @@ local itemTypes = {
   Item.itemTypes.good,
   Item.itemTypes.good,
   Item.itemTypes.good,
-  Item.itemTypes.bad,
-  Item.itemTypes.bad,
+  Item.itemTypes.good,
   Item.itemTypes.bad,
   Item.itemTypes.bad,
   Item.itemTypes.bad,
@@ -598,7 +597,7 @@ function generateRandomItems(dt)
   generationTime = generationTime + dt
   if generationTime > 1 then
     generationTime = 0
-    local itemHeight, itemWidth = 50, 50
+    local itemHeight, itemWidth = 35, 35
     local itemType = itemTypes[math.random(#itemTypes)]
     local itemPositionY = itemHeight + math.random(height - itemHeight)
     local itemPositionX = width
