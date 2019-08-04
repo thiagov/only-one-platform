@@ -179,7 +179,7 @@ end
 
 function drawDedAfter()
   if ded then
-    love.graphics.scale(1/xs, 1/ys)
+    -- love.graphics.scale(1/xs, 1/ys)
     local prescalerCoefficient = math.min(dedBlur*dedFinish/dedTime, dedBlur)
     horizontalShader:send("prescaler", prescalerCoefficient*2.5)
     verticalShader:send("prescaler", prescalerCoefficient*2.5)
