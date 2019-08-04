@@ -239,8 +239,11 @@ function love.load()
   light3 = love.graphics.newImage("bg/light3.png")
   light4 = love.graphics.newImage("bg/light4.png")
   --bgVignette = love.graphics.newImage("bg/vignette.png")
+  bgStar = love.graphics.newImage("bg/star.png")
+  starDeadline = bgStar:getWidth()*1.05+starPaddingX
 
   lightCanvas = love.graphics.newCanvas()
+  starCanvas = love.graphics.newCanvas()
   
   bgTimeStart = love.timer.getTime() + 20*1000*1000
 
@@ -330,7 +333,6 @@ bgColor = {
   rgb(240,173,48),--3
   rgb(229,161,46),--4
   rgb(225,156,45)--5
-
 }
 
 
@@ -356,6 +358,8 @@ function animateBG(dt)
     bgX[i] = bgX[i] - bgVX[i]*dt
     bgX[i] = bgX[i]%(width/2)-width
   end
+
+  moveStars(dt)
 end
 
 -- Light values
@@ -367,23 +371,46 @@ lightMin = {0.05,0,0.1,0}
 lightsMaxOpacity = 0.8
 lightAngle = {0,0.1,0,0.1}
 
-function drawBG()
-  local originalCanvas = love.graphics.getCanvas()
-  love.graphics.setColor(bgColor[1])
-  love.graphics.rectangle("fill", 0, 0, width, height)
+-- Star values
+starRows = 8
+starColumns = 24
+starX, starY = -190, -160
+starRowX = {0,0,0,0, 0,0,0,0}
+starPaddingX, starPaddingY = 200, 150
+starVX = {150,250,200,100, 50,150,200,100}
+starRotation = 0
+starVRotation = 0.5
+starRotationCoefficientX, starRotationCoefficientY = 0.3, 0.3
 
-  for i=1, tableLength(bgX), 1 do
-    love.graphics.setColor(bgColor[cycleColor(i,tableLength(bgColor))])
-    love.graphics.rectangle("fill", 0, bgy+bgGap*(i-1)+bgUnitHeight, width, bgUnitHeight+bgGap)
-    love.graphics.draw(bgNeutral,bgX[i], bgy+bgGap*(i-1))
-    love.graphics.draw(bgNeutral,bgX[i]+width, bgy+bgGap*(i-1))    
+function moveStars(dt)
+  for i=1, starRows, 1 do
+    starRowX[i] = starRowX[i]-starVX[i]*dt
+    if starRowX[i] <= -starDeadline*2 then starRowX[i] = starRowX[i]+starDeadline*1.5 end
   end
 
+  starRotation = starRotation+starVRotation*dt
+  if starRotation >= math.pi*2 then starRotation = starRotation-math.pi*2 end
+end
+
+function drawStars()
+  for c=1, starColumns, 1 do
+    for r=1, starRows, 1 do
+      love.graphics.setColor(bgColor[math.max(1,cycleColor(r-1,tableLength(bgColor)))])
+      love.graphics.draw(bgStar, starX+starRowX[r]+c*starPaddingX, starY+r*starPaddingY, starRotation+(c-1)*(math.pi*2)/2+(r-1)*starRotationCoefficientY, 1, 1, bgStar:getWidth()/2, bgStar:getHeight()/2)
+    end
+  end
+end
+
+function drawStripes()
   love.graphics.setColor(bgColor[1])
   love.graphics.draw(bgStripes, 0, 0)
 
   love.graphics.setColor(bgColor[1])
   love.graphics.draw(bgStripes, width, height, 0, -1, -1)
+end
+
+function drawLights()
+  local originalCanvas = love.graphics.getCanvas()
 
   bgTime = love.timer.getTime() - bgTimeStart
   love.graphics.setCanvas(lightCanvas)
@@ -403,11 +430,20 @@ function drawBG()
   love.graphics.draw(lightCanvas, 0, 0)
   love.graphics.setBlendMode("alpha")
   love.graphics.setColor(1,1,1,1)
+end
 
-  --love.graphics.setColor(1,1,1,1)
-  --love.graphics.draw(bgVignette, 0, 0)
-  --love.graphics.setColor(1,1,1,1)
+function drawBG()
+  love.graphics.setColor(bgColor[1])
+  love.graphics.rectangle("fill", 0, 0, width, height)
 
-  --love.graphics.setColor(1, 0, 0, 1)
-  --love.graphics.rectangle("fill", 200, math.sin(bgTime*10)*100+200, 10, 10)
+  for i=1, tableLength(bgX), 1 do
+    love.graphics.setColor(bgColor[cycleColor(i,tableLength(bgColor))])
+    love.graphics.rectangle("fill", 0, bgy+bgGap*(i-1)+bgUnitHeight, width, bgUnitHeight+bgGap)
+    love.graphics.draw(bgNeutral,bgX[i], bgy+bgGap*(i-1))
+    love.graphics.draw(bgNeutral,bgX[i]+width, bgy+bgGap*(i-1))    
+  end
+
+  drawStars()
+  drawStripes()
+  drawLights()
 end
