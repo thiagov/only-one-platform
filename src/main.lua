@@ -109,16 +109,10 @@ function loadShader()
    verticalVertexSource = verticalVertexSource:gsub("${{POPULATE_BLUR_OFFSETS}}", generateVerticalCoordinateOffsets(blurSamples))
    verticalVertexSource = verticalVertexSource:gsub("${{NUM_BLUR_SAMPLES}}", blurSamples)
    
-   print(horizontalVertexSource)
-   print(verticalVertexSource)
-   
    local fragmentSource = love.filesystem.read("material.fsh")
-   print(fragmentSource)
    
    horizontalShader = love.graphics.newShader(horizontalVertexSource, fragmentSource)
    verticalShader = love.graphics.newShader(verticalVertexSource, fragmentSource)
-   print(horizontalShader:getWarnings())
-   print(verticalShader:getWarnings())
 end
 
 
@@ -162,7 +156,6 @@ end
 
 function drawDedBefore()
   if ded then
-    -- love.graphics.scale(1/xs, 1/ys)
     -- love.graphics.setCanvas(canvasA)--here!
     dedFinish = love.timer.getTime() - dedStart
     dedShader:send("timing", dedFinish)
