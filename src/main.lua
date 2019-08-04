@@ -597,7 +597,7 @@ function generateRandomItems(dt)
   generationTime = generationTime + dt
   if generationTime > 1 then
     generationTime = 0
-    local itemHeight, itemWidth = 35, 35
+    local itemHeight, itemWidth = 57, 93
     local itemType = itemTypes[math.random(#itemTypes)]
     local itemPositionY = itemHeight + math.random(height - itemHeight)
     local itemPositionX = width

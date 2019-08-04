@@ -19,20 +19,18 @@ function Item:new(x, y, width, height, itemType)
   self.timeVisible = 0
   self.movementType = movementTypes[math.random(#movementTypes)]
   self.itemType = itemType
+  self.color = {1, 1, 1, 1}
   if self.itemType == Item.itemTypes.gooder then
     self.score = 500
     self.movementType = still
-    self.color = {1, 1, 0, 1}
     self.ttl = totalTtl
-    self.sprite = love.graphics.newImage("assets/sprites/lemon.png")
+    self.sprite = Animation(love.graphics.newImage("assets/sprites/apple-golden.png"), width, height, 0.5)
   elseif self.itemType == Item.itemTypes.good then
     self.score = 50
-    self.color = {0, 0, 1, 1}
-    self.sprite = love.graphics.newImage("assets/sprites/apple.png")
+    self.sprite = Animation(love.graphics.newImage("assets/sprites/apple-red.png"), width, height, 0.5)
   elseif self.itemType == Item.itemTypes.bad then
     self.score = -100
-    self.color = {1, 0, 0, 1}
-    self.sprite = love.graphics.newImage("assets/sprites/cheese.png")
+    self.sprite = Animation(love.graphics.newImage("assets/sprites/skull.png"), width, height, 0.5)
   end
   self.timeOnMovementType = 0
   self.velocity = 200 + math.random(300)
@@ -53,6 +51,7 @@ function Item:update(dt)
       self.y = self.y + 10*math.sin(self.yV)
     end
   end
+  self.sprite:update(dt)
 end
 
 function Item:changeMovementType(dt)
@@ -64,9 +63,9 @@ function Item:changeMovementType(dt)
 end
 
 function Item:draw()
-  --love.graphics.setColor(self.color)
+  love.graphics.setColor(self.color)
   if self.visible then
-    love.graphics.draw(self.sprite, self.x, self.y)
+    self.sprite:draw(self.x, self.y)
     --love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
   end
 end
