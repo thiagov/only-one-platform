@@ -24,9 +24,9 @@ function Platform:draw()
     love.graphics.setColor(1, 1, 1)
     love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
   end
-  love.graphics.draw(self.sprite, self.x, self.y-30)
   local mouseX, mouseY = love.mouse.getPosition()
   love.graphics.draw(self.mouseSprite, mouseX/self.xs-150/2, mouseY/self.ys-(84+30)/2)
+  love.graphics.draw(self.sprite, self.x, self.y-30)
 end
 
 return Platform;

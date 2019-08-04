@@ -5,7 +5,7 @@ local up, down = "up", "down"
 local itemTypes = {good, bad}
 
 function ScoreTick:new(x, y, score)
-  self.x = x
+  self.x = x-100
   self.y = y
   self.ttl = 1
   self.initialY = y
