@@ -5,8 +5,8 @@ local gravity = 3000
 local falling, jumping, idle = "falling", "jumping", "idle"
 
 function Hero:new(x, y, speed, width, height)
-  self.idleAnim = Animation(love.graphics.newImage("assets/sprites/idle100x150.png"), 100, 150, 0.5)
-  self.walkAnim = Animation(love.graphics.newImage("assets/sprites/walk100x150.png"), 100, 150, 0.5)
+  self.idleAnim = Animation(love.graphics.newImage("assets/sprites/walking.png"), 96, 117, 0.5)
+  self.walkAnim = Animation(love.graphics.newImage("assets/sprites/walking.png"), 96, 117, 0.5)
   self.animation = "idle"
   self.x = x
   self.y = y
@@ -58,7 +58,6 @@ function Hero:update(dt, platform, items)
 end
 
 function Hero:draw()
-  love.graphics.rectangle('line', self.x, self.y, self.width, self.height)
   if self.animation == "moving" then
     self.walkAnim:draw(self.x, self.y)
   else

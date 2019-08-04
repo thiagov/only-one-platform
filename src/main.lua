@@ -466,7 +466,7 @@ function love.load()
   platformInstance = Platform(10, 200, 150, 50)
   itemsInstance = {}
   scoreTicksInstance = {}
-  heroInstance = Hero(0, 0, 400, 100, 150)
+  heroInstance = Hero(0, 0, 400, 96, 117)
   scoreInstance = Score(width/2-50, 10)
   generationTime = 0
 
