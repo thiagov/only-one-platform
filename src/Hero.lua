@@ -45,6 +45,9 @@ function Hero:update(dt, platform, items)
   elseif self.status == idle and love.keyboard.isDown("space") then
     self.status = jumping
     self.velocity = self.jumpHeight
+    self.sound = love.audio.newSource("assets/sound/jump.ogg", "static")
+    self.sound:setVolume(0.4)
+    self.sound:play()
   elseif (self.status == idle and not isOnPlatform) or (self.status == jumping and self.velocity >= 0) then
     self.status = falling
     self.velocity = gravity * dt
