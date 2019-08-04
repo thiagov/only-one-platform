@@ -119,7 +119,7 @@ function generateBlurWeights(number)
    local stepsize = 1
    for i = 0,number,1 do
       if index+1 > number/2 and not inserted then
-   --substitutionString = substitutionString .. "pixelColor += Texel(currentTexture, texCoords       )*".. tostring(weights[number/2]) ..";\n"
+   substitutionString = substitutionString .. "pixelColor += Texel(currentTexture, texCoords       )*".. tostring(weights[number/2]) ..";\n"
    inserted = true
       else
    -- note that this expression uses both "i" and "index"
