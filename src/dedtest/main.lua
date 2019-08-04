@@ -28,15 +28,15 @@ end
 function drawFeatheredBorders(drawable, position, size, border)
   for i=1, border+1, 1 do
     love.graphics.setColor(1, 1, 1, i/(border+1))
-    quadful = love.graphics.newQuad(0, position-1+i, width, 1, width, height)
-    love.graphics.draw(drawable, quadful, 0, position-1+i)
+    --quadfulA = love.graphics.newQuad(0, position-1+i, width, 1, width, height)
+    love.graphics.draw(drawable, quadfulA[i], 0, position-1+i)
 
-    quadful = love.graphics.newQuad(0, position+size-i, width, 1, width, height)
-    love.graphics.draw(drawable, quadful, 0, position+size-i)
+    --quadfulB = love.graphics.newQuad(0, position+size-i, width, 1, width, height)
+    love.graphics.draw(drawable, quadfulB[i], 0, position+size-i)
   end
 
-  quadful = love.graphics.newQuad(0, position+border, width, size-border*2, width, height)
-  love.graphics.draw(drawable, quadful, 0, position+border)
+  --quadfulC = love.graphics.newQuad(0, position+border, width, size-border*2, width, height)
+  love.graphics.draw(drawable, quadfulC, 0, position+border)
 end
 
 
@@ -158,6 +158,19 @@ function initializeDed()
   canvasA, canvasB, canvasC = love.graphics.newCanvas(), love.graphics.newCanvas(), love.graphics.newCanvas()
 
   vignetteLove = generateVignette(dedSize, dedBorder)
+  quadful = love.graphics.newQuad(0, dedPosition, width, dedSize, width, height)
+
+  quadfulA = {}
+  for i=1,dedBorder+1,1 do
+    table.insert(quadfulA, love.graphics.newQuad(0, dedPosition-1+i, width, 1, width, height))
+  end
+
+  quadfulB = {}
+  for i=1,dedBorder+1,1 do
+    table.insert(quadfulB, love.graphics.newQuad(0, dedPosition+dedSize-i, width, 1, width, height))
+  end
+
+  quadfulC = love.graphics.newQuad(0, dedPosition+dedBorder, width, dedSize-dedBorder*2, width, height)
 end
 
 
@@ -193,7 +206,6 @@ function drawDedAfter()
 
     love.graphics.setShader(verticalShader)
 
-    quadful = love.graphics.newQuad(0, dedPosition, width, dedSize, width, height)
     love.graphics.draw(canvasB, quadful, 0, dedPosition)
 
     love.graphics.setCanvas()
