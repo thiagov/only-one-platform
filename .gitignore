@@ -1,7 +1,4 @@
 .DS_Store
-game.exe
-game.love
-dist
-only-one-platform.exe
 only-one-platform.love
 only-one-platform.mac.zip
+only-one-platform.windows.zip
